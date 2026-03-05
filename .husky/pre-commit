@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Lint..."
+
+# Frontend
+cd client && npm run lint && cd ..
+
+# Backend
+cd server && npm run lint && cd ..
+
+echo "All checks passed! Submitting commit..."
+
+
