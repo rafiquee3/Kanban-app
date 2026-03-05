@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Next.js build output
+client/.next/
+client/out/
+
+# NestJS build output
+server/dist/
+
+# Environment variables (BARDZO WAŻNE - nie publikuj haseł!)
+.env
+client/.env.local
+server/.env
+
+# IDE folders
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
