@@ -14,9 +14,10 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+  describe('profile', () => {
+    it('should return user data from token', () => {
+      const mockReq = { user: { userId: '123', email: 'test@test.com' } };
+      expect(appController.getProfile(mockReq)).toEqual(mockReq.user);
     });
   });
 });
