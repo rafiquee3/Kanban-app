@@ -11,6 +11,7 @@ async function bootstrap() {
       transform: true, // Automatically transform payloads to be objects typed according to their DTO classes
     }),
   );
+  app.enableCors();
   await app.listen(process.env.PORT ?? 4000);
 }
 bootstrap();
