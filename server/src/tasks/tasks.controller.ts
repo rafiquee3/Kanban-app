@@ -31,7 +31,7 @@ import {
   description: 'Unauthorized - Valid JWT token required',
 })
 @Controller('tasks')
-@UseGuards(JwtAuthGuard) // Protect the entire controller with JWT
+//@UseGuards(JwtAuthGuard) // Protect the entire controller with JWT
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
@@ -47,7 +47,7 @@ export class TasksController {
   @ApiOperation({ summary: 'Get all user tasks with optional filters' })
   @ApiOkResponse({ description: 'List of tasks retrieved successfully' })
   findAll(@Req() req, @Query() filterDto: GetTasksFilterDto) {
-    return this.tasksService.findAll(req.user.userId, filterDto);
+    return this.tasksService.findAll(filterDto);
   }
 
   @Patch(':id/status')

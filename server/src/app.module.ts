@@ -12,6 +12,7 @@ import { TasksModule } from './tasks/tasks.module';
     // Other modules that this module depends on (e.g., AuthModule needs PrismaModule).
     ConfigModule.forRoot({
       isGlobal: true, // Makes ConfigService available globally across all modules without re-importing ConfigModule
+      expandVariables: true,
     }),
     AuthModule,
     PrismaModule,

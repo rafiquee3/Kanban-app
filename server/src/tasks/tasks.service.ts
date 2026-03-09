@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
@@ -16,29 +16,46 @@ export class TasksService {
     });
   }
 
-  async findAll(userId: string, filterDto: GetTasksFilterDto) {
-    const { status, priority } = filterDto;
+  async findAll(filterDto: GetTasksFilterDto) {
+    const { status, priority } = filterDto; // Używamy tylko tego, co masz w DTO
 
     return this.prisma.task.findMany({
       where: {
-        userId,
-        status,
-        priority,
+        // If status is in the URL (?status=DONE), Prisma will include it
+        ...(status && { status }),
+        // If priority is in the URL (?priority=HIGH), Prisma will include it
+        ...(priority && { priority }),
       },
-      orderBy: { createdAt: 'desc' },
+      include: {
+        user: {
+          select: {
+            email: true,
+            username: true,
+          },
+        },
+      },
     });
   }
 
-  async updateStatus(id: string, status: any, userId: string) {
+  async updateStatus(id: string, status: any) {
     return this.prisma.task.updateMany({
-      where: { id, userId }, // We ensure that the user edits THEIR OWN task
+      where: { id },
       data: { status },
     });
   }
 
+
   async remove(id: string, userId: string) {
-    return this.prisma.task.deleteMany({
-      where: { id, userId },
+    const result = await this.prisma.task.deleteMany({
+      where: { 
+        id, userId 
+      },
     });
-  }
+
+    if (result.count === 0) {
+      throw new ForbiddenException("You do not have permission to delete this task, or the task does not exist.");
+    }
+
+    return result;
+}
 }
