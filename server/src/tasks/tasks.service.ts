@@ -44,18 +44,20 @@ export class TasksService {
     });
   }
 
-
   async remove(id: string, userId: string) {
     const result = await this.prisma.task.deleteMany({
-      where: { 
-        id, userId 
+      where: {
+        id,
+        userId,
       },
     });
 
     if (result.count === 0) {
-      throw new ForbiddenException("You do not have permission to delete this task, or the task does not exist.");
+      throw new ForbiddenException(
+        'You do not have permission to delete this task, or the task does not exist.',
+      );
     }
 
     return result;
-}
+  }
 }
