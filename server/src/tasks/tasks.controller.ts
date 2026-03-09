@@ -15,6 +15,7 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import {
   ApiTags,
@@ -48,6 +49,17 @@ export class TasksController {
   @ApiOkResponse({ description: 'List of tasks retrieved successfully' })
   findAll(@Req() req, @Query() filterDto: GetTasksFilterDto) {
     return this.tasksService.findAll(filterDto);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update a task' })
+  @ApiOkResponse({ description: 'Task updated successfully' })
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+    @Req() req,
+  ) {
+    return this.tasksService.update(id, updateTaskDto, req.user.userId);
   }
 
   @Patch(':id/status')

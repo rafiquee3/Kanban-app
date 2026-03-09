@@ -1,43 +1,78 @@
 'use client';
 
-import { useTasks } from "@/hooks/useTasks";
+import { DndContext, DragEndEvent, closestCorners } from '@dnd-kit/core';
+import { useTasks, Task } from '@/hooks/useTasks';
+import { useUpdateTaskStatus } from '@/hooks/useUpdateTaskStatus';
+import TaskModal from '@/components/TaskModal';
+import KanbanColumn from '@/components/KanbanColumn';
+import { useState } from 'react';
 
+const COLUMNS = [
+  { id: 'TODO', title: 'To Do' },
+  { id: 'IN_PROGRESS', title: 'In Progress' },
+  { id: 'DONE', title: 'Done' },
+];
 
+export default function KanbanBoard() {
+  const { data: tasks } = useTasks();
+  const { mutate: updateStatus } = useUpdateTaskStatus();
+  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
 
-export default function DashboardPage() {
-  const { data: tasks, isLoading, error } = useTasks();
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
 
-  if (isLoading) return <div className="p-10 text-center">Ładowanie zadań...</div>;
-  if (error) return <div className="p-10 text-red-500">Błąd połączenia z API!</div>;
+    if (!over) return;
 
-  const columns = [
-    { label: 'To Do', value: 'TODO' },
-    { label: 'In Progress', value: 'IN_PROGRESS' },
-    { label: 'Done', value: 'DONE' },
-  ];
+    const taskId = active.id as string;
+    const newStatus = over.id as string; // Column ID where dropped
+
+    // Call to NestJS via TanStack Mutation
+    updateStatus({ id: taskId, status: newStatus });
+  };
+
+  const handleEditTask = (task: Task) => {
+    setEditingTask(task);
+    setIsModalOpen(true);
+  };
+
+  const handleCreateTask = () => {
+    setEditingTask(null);
+    setIsModalOpen(true);
+  };
 
   return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {columns.map((col) => (
-          <div key={col.value} className="bg-gray-200 p-4 rounded-lg">
-            <h2 className="font-bold mb-4 uppercase text-gray-600">{col.label}</h2>
-            <div className="space-y-4">
-              {tasks?.filter(t => t.status === col.value).map(task => (
-                <div key={task.id} className="bg-white p-4 rounded shadow-sm">
-                  <h3 className="font-semibold">{task.title}</h3>
-                  <p className="text-sm text-gray-500">{task.user.email}</p>
-                  <span className={`text-xs px-2 py-1 rounded ${
-                    task.priority === 'HIGH' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'
-                  }`}>
-                    {task.priority}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+    <div className="flex flex-col gap-6 p-8 bg-gray-50 min-h-screen">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold text-gray-800">Kanban Board</h1>
+        <button
+          onClick={handleCreateTask}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm"
+        >
+          Create Task
+        </button>
       </div>
+
+      <DndContext collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
+        <div className="flex gap-6 overflow-x-auto pb-4">
+          {COLUMNS.map((col) => (
+            <KanbanColumn 
+              key={col.id} 
+              id={col.id} 
+              title={col.title} 
+              tasks={tasks?.filter(t => t.status === col.id) || []} 
+              onEditTask={handleEditTask}
+            />
+          ))}
+        </div>
+      </DndContext>
+
+      <TaskModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        task={editingTask}
+      />
     </div>
   );
 }

@@ -37,8 +37,25 @@ export class TasksService {
     });
   }
 
-  async updateStatus(id: string, status: any) {
-    return this.prisma.task.updateMany({
+  async update(id: string, updateTaskDto: any, userId: string) {
+    const task = await this.prisma.task.findUnique({ where: { id } });
+    if (!task || task.userId !== userId) {
+      throw new ForbiddenException('Task not found or permission denied');
+    }
+
+    return this.prisma.task.update({
+      where: { id },
+      data: updateTaskDto,
+    });
+  }
+
+  async updateStatus(id: string, status: any, userId: string) {
+    const task = await this.prisma.task.findUnique({ where: { id } });
+    if (!task || task.userId !== userId) {
+      throw new ForbiddenException('Task not found or permission denied');
+    }
+
+    return this.prisma.task.update({
       where: { id },
       data: { status },
     });
