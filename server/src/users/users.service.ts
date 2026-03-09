@@ -1,4 +1,8 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 
@@ -17,22 +21,22 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-async findById(id: string) {
+  async findById(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
       select: this.userSelect, // We're not returning the password to the controller
     });
-    
+
     if (!user) throw new NotFoundException('User not found');
     return user;
   }
 
-async create(email: string, pass: string) {
+  async create(email: string, pass: string) {
     const existing = await this.findByEmail(email);
     if (existing) throw new ConflictException('Email already in use');
 
     const hash = await bcrypt.hash(pass, 12);
-    
+
     return this.prisma.user.create({
       data: { email, password: hash },
       select: this.userSelect, // Returning the created user without the password

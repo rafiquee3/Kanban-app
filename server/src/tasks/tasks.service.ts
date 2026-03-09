@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 
 @Injectable()
 export class TasksService {
@@ -15,9 +16,15 @@ export class TasksService {
     });
   }
 
-  async findAll(userId: string) {
+  async findAll(userId: string, filterDto: GetTasksFilterDto) {
+    const { status, priority } = filterDto;
+
     return this.prisma.task.findMany({
-      where: { userId },
+      where: {
+        userId,
+        status,
+        priority,
+      },
       orderBy: { createdAt: 'desc' },
     });
   }
