@@ -8,7 +8,10 @@ export class CreateTaskDto {
   @IsNotEmpty()
   title: string;
 
-  @ApiProperty({ example: 'Go to the store and buy 2L of milk', required: false })
+  @ApiProperty({
+    example: 'Go to the store and buy 2L of milk',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   description?: string;

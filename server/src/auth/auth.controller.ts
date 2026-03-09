@@ -2,7 +2,15 @@ import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { ApiTags, ApiOperation, ApiResponse, ApiOkResponse, ApiUnauthorizedResponse, ApiCreatedResponse, ApiConflictResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiOkResponse,
+  ApiUnauthorizedResponse,
+  ApiCreatedResponse,
+  ApiConflictResponse,
+} from '@nestjs/swagger';
 
 @ApiTags('auth')
 @Controller('auth') // All endpoints will start with /auth

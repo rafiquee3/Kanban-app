@@ -15,7 +15,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  
+
   // 2. Entry point for documentation (e.g., localhost:4000/api)
   SwaggerModule.setup('api', app, document);
 

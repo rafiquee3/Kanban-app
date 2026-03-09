@@ -16,11 +16,20 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
-import { ApiTags, ApiBearerAuth, ApiOperation, ApiUnauthorizedResponse, ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiUnauthorizedResponse,
+  ApiCreatedResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
 
 @ApiTags('tasks')
 @ApiBearerAuth()
-@ApiUnauthorizedResponse({ description: 'Unauthorized - Valid JWT token required' })
+@ApiUnauthorizedResponse({
+  description: 'Unauthorized - Valid JWT token required',
+})
 @Controller('tasks')
 @UseGuards(JwtAuthGuard) // Protect the entire controller with JWT
 export class TasksController {
