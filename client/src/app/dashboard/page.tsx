@@ -13,8 +13,9 @@ import { useUpdateTaskStatus } from '@/hooks/useUpdateTaskStatus';
 import { useLogout } from '@/hooks/useAuth';
 import TaskModal from '@/components/TaskModal';
 import KanbanColumn from '@/components/KanbanColumn';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQueryState, parseAsString, parseAsBoolean } from 'nuqs';
 
 const COLUMNS = [
   { id: 'TODO', title: 'To Do' },
@@ -23,13 +24,18 @@ const COLUMNS = [
 ];
 
 export default function KanbanBoard() {
-  const { data: tasks } = useTasks();
+  const [priority, setPriority] = useQueryState('priority', parseAsString.withDefault(''));
+  const [isCreating, setIsCreating] = useQueryState('new', parseAsBoolean);
+  const { data: tasks, isLoading } = useTasks({ priority: priority || undefined });
   const { mutate: updateStatus } = useUpdateTaskStatus();
   const logout = useLogout();
-  const router = useRouter();
+  const router = useRouter(); 
   
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [taskId, setTaskId] = useQueryState('taskId');
+
+  const editingTask = tasks?.find(t => t.id === taskId) || null;
+  const isModalOpen = !!taskId || isCreating === true;
+
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -59,13 +65,16 @@ export default function KanbanBoard() {
   };
 
   const handleEditTask = (task: Task) => {
-    setEditingTask(task);
-    setIsModalOpen(true);
+    setTaskId(task.id); 
   };
 
   const handleCreateTask = () => {
-    setEditingTask(null);
-    setIsModalOpen(true);
+    setIsCreating(true); // URL: ?new=true
+  };
+
+  const handleCloseModal = () => {
+    setTaskId(null);
+    setIsCreating(null);
   };
 
   return (
@@ -87,7 +96,28 @@ export default function KanbanBoard() {
           </button>
         </div>
       </div>
+      {/* UI filtre */}
+      <div className="flex gap-4 mb-8">
+        <select 
+          value={priority} 
+          onChange={(e) => setPriority(e.target.value || null)}
+          className="border p-2 rounded bg-white shadow-sm text-sm"
+        >
+          <option value="">Wszystkie priorytety</option>
+          <option value="HIGH">Wysoki (High)</option>
+          <option value="MEDIUM">Średni (Medium)</option>
+          <option value="LOW">Niski (Low)</option>
+        </select>
 
+        {priority && (
+          <button 
+            onClick={() => setPriority(null)}
+            className="text-xs text-red-500 hover:underline"
+          >
+            Wyczyść filtry
+          </button>
+        )}
+      </div>
       <DndContext 
         sensors={sensors} 
         collisionDetection={closestCorners} 
@@ -108,7 +138,7 @@ export default function KanbanBoard() {
 
       <TaskModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleCloseModal}
         task={editingTask}
       />
     </div>
