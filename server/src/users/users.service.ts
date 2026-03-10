@@ -31,14 +31,14 @@ export class UsersService {
     return user;
   }
 
-  async create(email: string, pass: string) {
+  async create(email: string, pass: string, username?: string) {
     const existing = await this.findByEmail(email);
     if (existing) throw new ConflictException('Email already in use');
 
     const hash = await bcrypt.hash(pass, 12);
 
     return this.prisma.user.create({
-      data: { email, password: hash },
+      data: { email, password: hash, username },
       select: this.userSelect, // Returning the created user without the password
     });
   }

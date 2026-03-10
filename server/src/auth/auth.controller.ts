@@ -22,7 +22,11 @@ export class AuthController {
   @ApiCreatedResponse({ description: 'User successfully created' })
   @ApiConflictResponse({ description: 'Email already in use' })
   async register(@Body() registerDto: RegisterDto) {
-    return this.authService.register(registerDto.email, registerDto.password);
+    return this.authService.register(
+      registerDto.email,
+      registerDto.password,
+      registerDto.username,
+    );
   }
 
   @HttpCode(HttpStatus.OK)

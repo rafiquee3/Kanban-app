@@ -11,8 +11,8 @@ export class AuthService {
   ) {}
 
   // 1. REGISTRATION
-  async register(email: string, pass: string) {
-    const user = await this.usersService.create(email, pass);
+  async register(email: string, pass: string, username?: string) {
+    const user = await this.usersService.create(email, pass, username);
     return { message: 'User created successfully', userId: user.id };
   }
 
@@ -31,7 +31,11 @@ export class AuthService {
     }
 
     // If OK - issue JWT
-    const payload = { sub: user.id, email: user.email };
+    const payload = { 
+      sub: user.id, 
+      email: user.email,
+      username: user.username 
+    };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };

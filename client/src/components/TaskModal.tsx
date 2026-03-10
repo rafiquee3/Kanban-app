@@ -43,7 +43,7 @@ export default function TaskModal({ isOpen, onClose, task }: TaskModalProps) {
     if (task) {
       updateTask({ id: task.id, ...data });
     } else {
-      createTask(data as any);
+      createTask(data);
     }
     onClose();
   };

@@ -32,7 +32,7 @@ import {
   description: 'Unauthorized - Valid JWT token required',
 })
 @Controller('tasks')
-//@UseGuards(JwtAuthGuard) // Protect the entire controller with JWT
+@UseGuards(JwtAuthGuard) // Protect the entire controller with JWT
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 

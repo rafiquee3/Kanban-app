@@ -8,12 +8,21 @@ export class TasksService {
   constructor(private prisma: PrismaService) {}
 
   async create(createTaskDto: CreateTaskDto, userId: string) {
-    return this.prisma.task.create({
-      data: {
-        ...createTaskDto,
-        userId, // Key: we link the task to the logged-in user
-      },
-    });
+    try {
+      const { title, description, status, priority } = createTaskDto;
+      return await this.prisma.task.create({
+        data: {
+          title,
+          description,
+          status: status || 'TODO',
+          priority: priority || 'MEDIUM',
+          userId,
+        },
+      });
+    } catch (error) {
+      console.error('Error creating task:', error);
+      throw error;
+    }
   }
 
   async findAll(filterDto: GetTasksFilterDto) {

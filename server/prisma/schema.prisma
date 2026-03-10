@@ -36,8 +36,9 @@ enum Priority {
 model Task {
   id          String   @id @default(uuid())
   title       String
-  status      String   @default("TODO") // TODO, IN_PROGRESS, DONE
-  priority    String   @default("MEDIUM") // LOW, MEDIUM, HIGH
+  description String?
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
 
   userId      String
   user        User     @relation(fields: [userId], references: [id])

@@ -8,10 +8,10 @@ export const api = axios.create({
 });
 
 // Add jwt token to every request
-/* api.interceptors.request.use((config) => {
+api.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
-}); */
+});
