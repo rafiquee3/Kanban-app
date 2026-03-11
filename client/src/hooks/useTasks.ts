@@ -14,7 +14,7 @@ export interface Task {
   };
 }
 
-export const useTasks = (filters?: { status?: string; priority?: string }) => {
+export const useTasks = (filters?: { status?: string; priority?: string; search?: string }) => {
   return useQuery<Task[]>({
     queryKey: ['tasks', filters],
     queryFn: async () => {

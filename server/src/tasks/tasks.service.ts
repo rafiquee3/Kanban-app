@@ -26,12 +26,18 @@ export class TasksService {
   }
 
   async findAll(filterDto: GetTasksFilterDto) {
-    const { status, priority } = filterDto;
+    const { status, priority, search } = filterDto;
 
     return this.prisma.task.findMany({
       where: {
         ...(status && { status }),
         ...(priority && { priority }),
+        ...(search && {
+          OR: [
+            { title: { contains: search, mode: 'insensitive' } },
+            { description: { contains: search, mode: 'insensitive' } },
+          ],
+        }),
       },
       include: {
         user: {

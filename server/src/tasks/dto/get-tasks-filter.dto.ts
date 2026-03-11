@@ -12,4 +12,8 @@ export class GetTasksFilterDto {
   @IsOptional()
   @IsEnum(Priority)
   priority?: Priority;
+
+  @ApiProperty({ required: false, description: 'Search term for title or description' })
+  @IsOptional()
+  search?: string;
 }

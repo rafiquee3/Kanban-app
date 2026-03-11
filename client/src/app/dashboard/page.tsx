@@ -27,8 +27,15 @@ const COLUMNS = [
 
 export default function KanbanBoard() {
   const [priority, setPriority] = useQueryState('priority', parseAsString.withDefault(''));
+  const [search, setSearch] = useQueryState(
+    'search',
+    parseAsString.withDefault('').withOptions({ shallow: false, throttleMs: 500 })
+  );
   const [isCreating, setIsCreating] = useQueryState('new', parseAsBoolean);
-  const { data: tasks, isLoading } = useTasks({ priority: priority || undefined });
+  const { data: tasks, isLoading } = useTasks({ 
+    priority: priority || undefined,
+    search: search || undefined
+  });
   const { mutate: updateStatus } = useUpdateTaskStatus();
   const logout = useLogout();
   const router = useRouter(); 
@@ -98,8 +105,16 @@ export default function KanbanBoard() {
           </button>
         </div>
       </div>
-      {/* UI Filtre */}
+      {/* UI Filtre/ SEARCH */}
       <div className="flex gap-4 mb-8">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value || null)}
+          placeholder="Search tasks..."
+          className="border p-2 rounded bg-white shadow-sm text-sm flex-1 max-w-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        />
+
         <select 
           value={priority} 
           onChange={(e) => setPriority(e.target.value || null)}
@@ -111,12 +126,15 @@ export default function KanbanBoard() {
               <option value="LOW">🔵 Low</option>
         </select>
 
-        {priority && (
+        {(priority || search) && (
           <button 
-            onClick={() => setPriority(null)}
+            onClick={() => {
+              setPriority(null);
+              setSearch(null);
+            }}
             className="text-xs text-red-500 hover:underline"
           >
-            Wyczyść filtry
+            Clear filters
           </button>
         )}
       </div>
