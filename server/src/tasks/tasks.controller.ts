@@ -51,6 +51,13 @@ export class TasksController {
     return this.tasksService.findAll(filterDto);
   }
 
+  @Get('stats')
+  @ApiOperation({ summary: 'Get task statistics' })
+  @ApiOkResponse({ description: 'Statistics retrieved successfully' })
+  getStats() {
+    return this.tasksService.getStats();
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Update a task' })
   @ApiOkResponse({ description: 'Task updated successfully' })

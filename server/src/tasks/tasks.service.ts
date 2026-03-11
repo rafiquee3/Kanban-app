@@ -26,13 +26,11 @@ export class TasksService {
   }
 
   async findAll(filterDto: GetTasksFilterDto) {
-    const { status, priority } = filterDto; // Używamy tylko tego, co masz w DTO
+    const { status, priority } = filterDto;
 
     return this.prisma.task.findMany({
       where: {
-        // If status is in the URL (?status=DONE), Prisma will include it
         ...(status && { status }),
-        // If priority is in the URL (?priority=HIGH), Prisma will include it
         ...(priority && { priority }),
       },
       include: {
@@ -85,5 +83,29 @@ export class TasksService {
     }
 
     return result;
+  }
+
+  async getStats() {
+    const [statusStats, priorityStats] = await Promise.all([
+      this.prisma.task.groupBy({
+        by: ['status'],
+        _count: { id: true },
+      }),
+      this.prisma.task.groupBy({
+        by: ['priority'],
+        _count: { id: true },
+      }),
+    ]);
+
+    return {
+      byStatus: statusStats.reduce(
+        (acc, c) => ({ ...acc, [c.status]: c._count.id }),
+        {},
+      ),
+      byPriority: priorityStats.map((p) => ({
+        name: p.priority,
+        value: p._count.id,
+      })),
+    };
   }
 }

@@ -7,6 +7,7 @@ export interface Task {
   description?: string;
   status: 'TODO' | 'IN_PROGRESS' | 'DONE';
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
+  userId: string;
   user: {
     email: string;
     username?: string;

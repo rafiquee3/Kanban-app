@@ -16,6 +16,8 @@ import KanbanColumn from '@/components/KanbanColumn';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQueryState, parseAsString, parseAsBoolean } from 'nuqs';
+import { StatsBar } from '@/components/StatsBar';
+import { PriorityChart } from '@/components/PriorityChart';
 
 const COLUMNS = [
   { id: 'TODO', title: 'To Do' },
@@ -96,17 +98,17 @@ export default function KanbanBoard() {
           </button>
         </div>
       </div>
-      {/* UI filtre */}
+      {/* UI Filtre */}
       <div className="flex gap-4 mb-8">
         <select 
           value={priority} 
           onChange={(e) => setPriority(e.target.value || null)}
           className="border p-2 rounded bg-white shadow-sm text-sm"
         >
-          <option value="">Wszystkie priorytety</option>
-          <option value="HIGH">Wysoki (High)</option>
-          <option value="MEDIUM">Średni (Medium)</option>
-          <option value="LOW">Niski (Low)</option>
+         <option value="">All</option>
+              <option value="HIGH">🔴 High</option>
+              <option value="MEDIUM">🟡 Medium</option>
+              <option value="LOW">🔵 Low</option>
         </select>
 
         {priority && (
@@ -118,12 +120,23 @@ export default function KanbanBoard() {
           </button>
         )}
       </div>
+
+      {/* ANALYTICS (STATISTICS) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10 items-start">
+        <div className="lg:col-span-1">
+          <StatsBar />
+        </div>
+        <div className="lg:col-span-2">
+          <PriorityChart />
+        </div>
+      </div>
+
       <DndContext 
         sensors={sensors} 
         collisionDetection={closestCorners} 
         onDragEnd={handleDragEnd}
       >
-        <div className="flex gap-6 overflow-x-auto pb-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-4">
           {COLUMNS.map((col) => (
             <KanbanColumn 
               key={col.id} 

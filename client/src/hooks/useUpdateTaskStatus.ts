@@ -43,6 +43,7 @@ export const useUpdateTaskStatus = () => {
     // 3. Always refetch after error or success to synchronize with the server
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['tasks-stats'] });
     },
   });
 };
