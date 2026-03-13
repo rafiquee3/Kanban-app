@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi"
+    "prepare": "husky install || true"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
