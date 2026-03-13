@@ -22,7 +22,8 @@
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev",
     "test:int": "dotenv -e .env.test -- jest src/tasks/tasks.service.integration.spec.ts",
-    "test:task": "dotenv -e .env.test -- jest src/tasks/tasks.service.spec.ts"
+    "test:task": "dotenv -e .env.test -- jest src/tasks/tasks.service.spec.ts",
+    "postinstall": "npx prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
