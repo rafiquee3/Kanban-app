@@ -6,9 +6,10 @@
 ![Prisma](https://img.shields.io/badge/Prisma-7.4.2-blue?logo=prisma)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.2.1-38B2AC?logo=tailwind-css)
 
-A full-stack, responsive, and secure Kanban board application designed to help users efficiently organize and track their tasks. 
+A full-stack, responsive, and secure Kanban board application designed to help users efficiently organize and track their tasks.
 
 **Live Frontend Demo:** [Kanban App on Vercel](https://kanban-app-livid-nine.vercel.app/)  
+  *(Demo Credentials — Email: `test@test.com` | Password: `test123TEST`)*  
 **Live Backend Swagger UI:** [Kanban API on Render](https://kanban-backend-qd2o.onrender.com/api)
 
 ## ✨ Features
@@ -23,6 +24,7 @@ A full-stack, responsive, and secure Kanban board application designed to help u
 ## 🛠️ Technology Stack
 
 ### Frontend (`/client`)
+
 - **Framework:** Next.js 15 (App Router, React 19)
 - **Styling:** Tailwind CSS 4, Tailwind-merge, clsx
 - **UI Components:** Shadcn UI, Radix UI, Tremor (for charts), Lucide React (icons)
@@ -32,6 +34,7 @@ A full-stack, responsive, and secure Kanban board application designed to help u
 - **Deployment:** Vercel
 
 ### Backend (`/server`)
+
 - **Framework:** NestJS 11
 - **Database:** PostgreSQL (Hosted on [Neon.tech](https://neon.tech/))
 - **ORM:** Prisma Client & Adapter-PG
@@ -46,11 +49,13 @@ A full-stack, responsive, and secure Kanban board application designed to help u
 ## 🚀 Getting Started (Local Development)
 
 ### Prerequisites
+
 - Node.js (v20 or higher)
 - npm or yarn
 - A PostgreSQL database (or a Neon.tech connection string)
 
 ### 1. Clone the repository
+
 ```bash
 git clone https://github.com/rafiquee3/Kanban-app.git
 cd Kanban-app
@@ -59,17 +64,20 @@ cd Kanban-app
 ### 2. Backend Setup (`/server`)
 
 Navigate to the server directory:
+
 ```bash
 cd server
 ```
 
 Install dependencies:
+
 ```bash
 npm install
 ```
 
 Set up Environment Variables:
 Create a `.env` file in the `/server` root and add the following:
+
 ```env
 DATABASE_URL="postgresql://<USER>:<PASSWORD>@<HOST>:<PORT>/<DATABASE>?sslmode=require"
 JWT_SECRET="your_super_secret_jwt_key_here"
@@ -77,39 +85,48 @@ PORT=4000
 ```
 
 Initialize the database schema:
+
 ```bash
 npx prisma db push
 ```
-*(Note: Prisma client is generated automatically via the `postinstall` script).*
+
+_(Note: Prisma client is generated automatically via the `postinstall` script)._
 
 Start the development server:
+
 ```bash
 npm run start:dev
 ```
+
 The API will be running at `http://localhost:4000`. You can view the Swagger documentation at `http://localhost:4000/api`.
 
 ### 3. Frontend Setup (`/client`)
 
 Open a new terminal session and navigate to the client directory:
+
 ```bash
 cd client
 ```
 
 Install dependencies:
+
 ```bash
 npm install
 ```
 
 Set up Environment Variables:
 Create a `.env.local` file in the `/client` root:
+
 ```env
 NEXT_PUBLIC_API_URL="http://localhost:4000"
 ```
 
 Start the development server:
+
 ```bash
 npm run dev
 ```
+
 The frontend will be running at `http://localhost:3000`.
 
 ---
@@ -119,6 +136,7 @@ The frontend will be running at `http://localhost:3000`.
 Both the frontend and backend contain automated test suites to ensure code reliability.
 
 ### Backend Tests (NestJS / Jest)
+
 ```bash
 cd server
 
@@ -130,6 +148,7 @@ npm run test:int
 ```
 
 ### Frontend Tests (Next.js / Vitest)
+
 ```bash
 cd client
 
@@ -143,9 +162,11 @@ npm run test:watch
 ---
 
 ## 🔗 Deployment Details
+
 - The **PostgreSQL database** is managed via **Neon.tech** for serverless scaling.
 - The **NestJS API** is hosted on **Render** (Web Service), utilizing a fast, reliable Node environment.
 - The **Next.js Frontend** is deployed via **Vercel**, taking advantage of their global Edge Network.
 
 ## 📄 License
+
 This project is explicitly marked as UNLICENSED. Please contact the author for usage permissions.
