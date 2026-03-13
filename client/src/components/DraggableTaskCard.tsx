@@ -74,19 +74,22 @@ export default function DraggableTaskCard({ task, onClick }: DraggableTaskCardPr
         </div>
       </div>
       <div className="flex-1 min-w-0 flex flex-col">
-        <div className="flex justify-between items-start mb-3">
+        <div className="flex justify-between items-start mb-1">
           <p className="font-medium text-gray-800 truncate pr-2">{task.title}</p>
           {task.userId === currentUserId && (
             <button
               onClick={handleDelete}
               disabled={isDeleting}
               className={`text-gray-300 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-red-50 -mt-1 -mr-1 ${isDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
-              title="Usuń zadanie"
+              title="Delete task"
             >
               <Trash2 size={14} />
             </button>
           )}
         </div>
+        <p className="text-[10px] text-gray-400 mb-3 truncate">
+          by {task.user?.username || task.user?.email}
+        </p>
         <div className="flex justify-between items-center mt-auto">
           <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase ${
             task.priority === 'HIGH' ? 'bg-red-100 text-red-600' : 

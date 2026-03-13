@@ -18,6 +18,8 @@ import { useRouter } from 'next/navigation';
 import { useQueryState, parseAsString, parseAsBoolean } from 'nuqs';
 import { StatsBar } from '@/components/StatsBar';
 import { PriorityChart } from '@/components/PriorityChart';
+import { Button } from '@/components/ui/button';
+import { Plus, LogOut } from 'lucide-react';
 
 const COLUMNS = [
   { id: 'TODO', title: 'To Do' },
@@ -89,20 +91,17 @@ export default function KanbanBoard() {
   return (
     <div className="flex flex-col gap-6 p-8 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold text-gray-800">Kanban Board</h1>
+        <h1 className="text-3xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-tr from-slate-900 via-blue-800 to-indigo-900 sm:text-4xl">
+          Kanban Board
+        </h1>
         <div className="flex gap-4">
-          <button
-            onClick={handleCreateTask}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm"
-          >
-            Create Task
-          </button>
-          <button
-            onClick={logout}
-            className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition shadow-sm"
-          >
-            Logout
-          </button>
+          <Button onClick={handleCreateTask}>
+            <Plus className="mr-2 h-4 w-4" /> Create Task
+          </Button>
+
+          <Button variant="outline" onClick={logout}>
+            <LogOut className="mr-2 h-4 w-4" /> Logout
+          </Button>
         </div>
       </div>
       {/* UI Filtre/ SEARCH */}
