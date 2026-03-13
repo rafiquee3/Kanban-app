@@ -12,6 +12,9 @@ export class AuthService {
 
   // 1. REGISTRATION
   async register(email: string, pass: string, username?: string) {
+    if (pass.length < 6) {
+      throw new Error('Password too short');
+    }
     const user = await this.usersService.create(email, pass, username);
     return { message: 'User created successfully', userId: user.id };
   }
