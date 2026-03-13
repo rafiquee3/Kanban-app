@@ -6,6 +6,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Task } from '@/hooks/useTasks';
 import { useDeleteTask } from '@/hooks/useDeleteTask';
 import { Trash2 } from 'lucide-react';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface DraggableTaskCardProps {
   task: Task;
@@ -66,12 +67,11 @@ export default function DraggableTaskCard({ task, onClick }: DraggableTaskCardPr
       className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-grab active:cursor-grabbing hover:border-blue-300 transition-colors group flex gap-3"
     >
       <div className="flex-shrink-0 mt-0.5">
-        <div 
-          className="w-8 h-8 rounded-full bg-slate-200 border-2 border-white shadow-sm text-slate-600 flex items-center justify-center text-xs font-bold"
-          title={task.user?.username || task.user?.email || 'User'}
-        >
-          {getInitials(task.user?.username, task.user?.email)}
-        </div>
+        <Avatar className="h-8 w-8 border border-white shadow-sm ring-1 ring-slate-100">
+          <AvatarFallback className="bg-slate-100 text-slate-600 text-[10px] font-bold">
+            {getInitials(task.user?.username, task.user?.email)}
+          </AvatarFallback>
+        </Avatar>
       </div>
       <div className="flex-1 min-w-0 flex flex-col">
         <div className="flex justify-between items-start mb-1">

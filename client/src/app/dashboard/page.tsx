@@ -19,6 +19,14 @@ import { useQueryState, parseAsString, parseAsBoolean } from 'nuqs';
 import { StatsBar } from '@/components/StatsBar';
 import { PriorityChart } from '@/components/PriorityChart';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Plus, LogOut } from 'lucide-react';
 
 const COLUMNS = [
@@ -76,7 +84,7 @@ export default function KanbanBoard() {
   };
 
   const handleEditTask = (task: Task) => {
-    setTaskId(task.id); 
+    setTaskId(task.id);
   };
 
   const handleCreateTask = () => {
@@ -106,35 +114,53 @@ export default function KanbanBoard() {
       </div>
       {/* UI Filtre/ SEARCH */}
       <div className="flex gap-4 mb-8">
-        <input
+        <Input
           type="text"
           value={search}
-          onChange={(e) => setSearch(e.target.value || null)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value || null)}
           placeholder="Search tasks..."
-          className="border p-2 rounded bg-white shadow-sm text-sm flex-1 max-w-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          className="flex-1 max-w-md"
         />
 
-        <select 
-          value={priority} 
-          onChange={(e) => setPriority(e.target.value || null)}
-          className="border p-2 rounded bg-white shadow-sm text-sm"
-        >
-         <option value="">All</option>
-              <option value="HIGH">🔴 High</option>
-              <option value="MEDIUM">🟡 Medium</option>
-              <option value="LOW">🔵 Low</option>
-        </select>
+        <Select value={priority} onValueChange={(val) => setPriority(val === 'all' ? null : val)}>
+          <SelectTrigger className="w-[140px]">
+            <SelectValue placeholder="All Priorities" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Priorities</SelectItem>
+            <SelectItem value="HIGH">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-red-500" />
+                <span>High</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="MEDIUM">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                <span>Medium</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="LOW">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-green-500" />
+                <span>Low</span>
+              </div>
+            </SelectItem>
+          </SelectContent>
+        </Select>
 
         {(priority || search) && (
-          <button 
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => {
               setPriority(null);
               setSearch(null);
             }}
-            className="text-xs text-red-500 hover:underline"
+            className="text-xs text-red-500 hover:text-red-700 h-9"
           >
             Clear filters
-          </button>
+          </Button>
         )}
       </div>
 
