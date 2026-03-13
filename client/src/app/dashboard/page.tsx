@@ -35,7 +35,9 @@ const COLUMNS = [
   { id: 'DONE', title: 'Done' },
 ];
 
-export default function KanbanBoard() {
+import { Suspense } from 'react';
+
+function KanbanBoard() {
   const [priority, setPriority] = useQueryState('priority', parseAsString.withDefault(''));
   const [search, setSearch] = useQueryState(
     'search',
@@ -94,6 +96,10 @@ export default function KanbanBoard() {
   const handleCloseModal = () => {
     setTaskId(null);
     setIsCreating(null);
+  };
+
+  const handleCloseModalLocal = () => {
+    handleCloseModal();
   };
 
   return (
@@ -194,9 +200,17 @@ export default function KanbanBoard() {
 
       <TaskModal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={handleCloseModalLocal}
         task={editingTask}
       />
     </div>
+  );
+}
+
+export default function KanbanPage() {
+  return (
+    <Suspense fallback={<div>Loading dashboard...</div>}>
+      <KanbanBoard />
+    </Suspense>
   );
 }
