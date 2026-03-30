@@ -9,7 +9,7 @@
 A full-stack, responsive, and secure Kanban board application designed to help users efficiently organize and track their tasks.
 
 **Live Frontend Demo:** [Kanban App on Vercel](https://kanban-app-livid-nine.vercel.app/)  
-  *(Demo Credentials — Email: `test@test.com` | Password: `test123TEST`)*  
+  *(Demo Credentials — Email: `test@test.com` | Password: `test123`)*  
 **Live Backend Swagger UI:** [Kanban API on Render](https://kanban-backend-qd2o.onrender.com/api)
 
 ## Features
@@ -161,7 +161,12 @@ For a quick and consistent setup across different environments, you can use Dock
    - **Backend API:** [http://localhost:4000](http://localhost:4000)
    - **Swagger UI:** [http://localhost:4000/api](http://localhost:4000/api)
 
-4. **Stopping:**
+4. **Demo Credentials:**
+   You can log in to the application (both locally and on the demo site) using the following test account:
+   - **Email:** `test@test.com`
+   - **Password:** `test123`
+
+5. **Stopping:**
    To stop and remove the containers, run:
    ```bash
    docker-compose down
