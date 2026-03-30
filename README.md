@@ -131,6 +131,44 @@ The frontend will be running at `http://localhost:3000`.
 
 ---
 
+## Run with Docker
+
+For a quick and consistent setup across different environments, you can use Docker Compose. This will spin up the Frontend, Backend, and a local PostgreSQL database automatically.
+
+### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
+
+### Quick Start
+
+1. **Configure Environment Variables:**
+   Ensure you have a `.env` file in the **root directory** of the project. It should contain the database credentials and JWT secret. Example:
+   ```env
+   DB_USER=rafiquee
+   DB_PASSWORD=skl123456
+   DB_NAME=task_db
+   JWT_SECRET=your_jwt_secret
+   ```
+
+2. **Build and Start:**
+   Run the following command from the root folder:
+   ```bash
+   docker-compose up --build
+   ```
+
+3. **Access the Services:**
+   - **Frontend:** [http://localhost:3000](http://localhost:3000)
+   - **Backend API:** [http://localhost:4000](http://localhost:4000)
+   - **Swagger UI:** [http://localhost:4000/api](http://localhost:4000/api)
+
+4. **Stopping:**
+   To stop and remove the containers, run:
+   ```bash
+   docker-compose down
+   ```
+
+---
+
 ## Running Tests
 
 Both the frontend and backend contain automated test suites to ensure code reliability.
