@@ -1,6 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
+import { RequestWithUser } from '../auth/interfaces/request-with-user.interface';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
+import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
 
 describe('TasksController', () => {
   let controller: TasksController;
@@ -33,33 +37,47 @@ describe('TasksController', () => {
   });
 
   describe('userId passing', () => {
-    const mockUser = { userId: 'user-123' };
-    const mockRequest = { user: mockUser };
+    const mockUser = { userId: 'user-123', email: 'test@test.com' };
+    const mockRequest = { user: mockUser } as unknown as RequestWithUser;
 
     it('should pass userId to tasksService.create', async () => {
-      const dto = { title: 'Test Task' } as any;
+      const dto = { title: 'Test Task' } as CreateTaskDto;
       await controller.create(dto, mockRequest);
-      expect(mockTasksService.create).toHaveBeenCalledWith(dto, mockUser.userId);
+      expect(mockTasksService.create).toHaveBeenCalledWith(
+        dto,
+        mockUser.userId,
+      );
     });
 
     it('should pass userId to tasksService.update', async () => {
-      const dto = { title: 'Updated' } as any;
+      const dto = { title: 'Updated' } as UpdateTaskDto;
       const taskId = 'task-uuid';
       await controller.update(taskId, dto, mockRequest);
-      expect(mockTasksService.update).toHaveBeenCalledWith(taskId, dto, mockUser.userId);
+      expect(mockTasksService.update).toHaveBeenCalledWith(
+        taskId,
+        dto,
+        mockUser.userId,
+      );
     });
 
     it('should pass userId to tasksService.updateStatus', async () => {
-      const dto = { status: 'DONE' } as any;
+      const dto = { status: 'DONE' } as UpdateTaskStatusDto;
       const taskId = 'task-uuid';
       await controller.updateStatus(taskId, dto, mockRequest);
-      expect(mockTasksService.updateStatus).toHaveBeenCalledWith(taskId, dto.status, mockUser.userId);
+      expect(mockTasksService.updateStatus).toHaveBeenCalledWith(
+        taskId,
+        dto.status,
+        mockUser.userId,
+      );
     });
 
     it('should pass userId to tasksService.remove', async () => {
       const taskId = 'task-uuid';
       await controller.remove(taskId, mockRequest);
-      expect(mockTasksService.remove).toHaveBeenCalledWith(taskId, mockUser.userId);
+      expect(mockTasksService.remove).toHaveBeenCalledWith(
+        taskId,
+        mockUser.userId,
+      );
     });
   });
 });

@@ -17,7 +17,7 @@ export default function LoginPage() {
     login(
       { email, password },
       {
-        onError: (err: any) => {
+        onError: (err: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
           setError(err.response?.data?.message || 'Invalid login credentials.');
         },
       }
@@ -68,7 +68,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account yet?{' '}
+          Don&apos;t have an account yet?{' '}
           <Link href="/register" className="text-blue-600 hover:underline">
             Sign up
           </Link>

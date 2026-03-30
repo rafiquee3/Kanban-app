@@ -30,7 +30,7 @@ describe('TasksService', () => {
     }).compile();
 
     service = module.get<TasksService>(TasksService);
-    
+
     jest.clearAllMocks();
   });
 
@@ -51,8 +51,11 @@ describe('TasksService', () => {
           userId: ownerId,
         });
 
-        await expect(service.update(taskId, { title: 'New Title' }, hackerId))
-          .rejects.toThrow(new ForbiddenException('Task not found or permission denied'));
+        await expect(
+          service.update(taskId, { title: 'New Title' }, hackerId),
+        ).rejects.toThrow(
+          new ForbiddenException('Task not found or permission denied'),
+        );
       });
 
       it('should allow update if user is the owner', async () => {
@@ -60,9 +63,16 @@ describe('TasksService', () => {
           id: taskId,
           userId: ownerId,
         });
-        mockPrismaService.task.update.mockResolvedValue({ id: taskId, title: 'Updated' });
+        mockPrismaService.task.update.mockResolvedValue({
+          id: taskId,
+          title: 'Updated',
+        });
 
-        const result = await service.update(taskId, { title: 'Updated' }, ownerId);
+        const result = await service.update(
+          taskId,
+          { title: 'Updated' },
+          ownerId,
+        );
         expect(result.title).toBe('Updated');
         expect(mockPrismaService.task.update).toHaveBeenCalled();
       });
@@ -73,8 +83,9 @@ describe('TasksService', () => {
         // deleteMany returns { count: 0 } if nothing matched the where clause (id + userId)
         mockPrismaService.task.deleteMany.mockResolvedValue({ count: 0 });
 
-        await expect(service.remove(taskId, hackerId))
-          .rejects.toThrow(ForbiddenException);
+        await expect(service.remove(taskId, hackerId)).rejects.toThrow(
+          ForbiddenException,
+        );
       });
 
       it('should successfully remove if task exists and owner matches', async () => {
@@ -106,6 +117,7 @@ describe('TasksService', () => {
               { description: { contains: 'test', mode: 'insensitive' } },
             ],
           },
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           include: expect.any(Object),
         });
       });

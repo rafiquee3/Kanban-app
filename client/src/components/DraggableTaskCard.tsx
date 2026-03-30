@@ -22,9 +22,10 @@ export default function DraggableTaskCard({ task, onClick }: DraggableTaskCardPr
       const token = localStorage.getItem('token');
       if (token) {
         const payload = JSON.parse(atob(token.split('.')[1]));
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCurrentUserId(payload.sub);
       }
-    } catch (e) {
+    } catch (_e) { // eslint-disable-line @typescript-eslint/no-unused-vars
       // Ignore token parse error
     }
   }, []);

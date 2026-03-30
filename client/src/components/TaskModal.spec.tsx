@@ -15,8 +15,8 @@ describe('TaskModal Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useCreateTask as any).mockReturnValue({ mutate: mockCreateMutate });
-    (useUpdateTask as any).mockReturnValue({ mutate: mockUpdateMutate });
+    (useCreateTask as any).mockReturnValue({ mutate: mockCreateMutate }); // eslint-disable-line @typescript-eslint/no-explicit-any
+    (useUpdateTask as any).mockReturnValue({ mutate: mockUpdateMutate }); // eslint-disable-line @typescript-eslint/no-explicit-any
   });
 
   it('should render empty for new task', () => {
@@ -35,7 +35,7 @@ describe('TaskModal Component', () => {
       priority: 'HIGH',
     };
 
-    render(<TaskModal isOpen={true} onClose={mockClose} task={task as any} />);
+    render(<TaskModal isOpen={true} onClose={mockClose} task={task as any} />); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     expect(screen.getByText('Edit Task')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Current Task')).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe('TaskModal Component', () => {
       priority: 'MEDIUM',
     };
 
-    render(<TaskModal isOpen={true} onClose={mockClose} task={task as any} />);
+    render(<TaskModal isOpen={true} onClose={mockClose} task={task as any} />); // eslint-disable-line @typescript-eslint/no-explicit-any
 
     fireEvent.change(screen.getByDisplayValue('Old Title'), { target: { value: 'Updated Title' } });
     fireEvent.click(screen.getByText('Update task'));

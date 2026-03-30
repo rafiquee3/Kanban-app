@@ -34,10 +34,10 @@ export class AuthService {
     }
 
     // If OK - issue JWT
-    const payload = { 
-      sub: user.id, 
+    const payload = {
+      sub: user.id,
       email: user.email,
-      username: user.username 
+      username: user.username,
     };
     return {
       access_token: await this.jwtService.signAsync(payload),

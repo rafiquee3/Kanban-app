@@ -29,7 +29,7 @@ describe('UsersService', () => {
     }).compile();
 
     service = module.get<UsersService>(UsersService);
-    
+
     jest.clearAllMocks();
   });
 
@@ -43,10 +43,13 @@ describe('UsersService', () => {
       // Mock findUnique (called via findByEmail) to return an existing user
       mockPrismaService.user.findUnique.mockResolvedValue({ id: '1', email });
 
-      await expect(service.create(email, 'password123'))
-        .rejects.toThrow(new ConflictException('Email already in use'));
-        
-      expect(mockPrismaService.user.findUnique).toHaveBeenCalledWith({ where: { email } });
+      await expect(service.create(email, 'password123')).rejects.toThrow(
+        new ConflictException('Email already in use'),
+      );
+
+      expect(mockPrismaService.user.findUnique).toHaveBeenCalledWith({
+        where: { email },
+      });
       expect(mockPrismaService.user.create).not.toHaveBeenCalled();
     });
 
@@ -54,10 +57,10 @@ describe('UsersService', () => {
       const email = 'new@example.com';
       mockPrismaService.user.findUnique.mockResolvedValue(null);
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
-      mockPrismaService.user.create.mockResolvedValue({ 
-        id: '2', 
-        email, 
-        createdAt: new Date() 
+      mockPrismaService.user.create.mockResolvedValue({
+        id: '2',
+        email,
+        createdAt: new Date(),
       });
 
       const result = await service.create(email, 'password123', 'newuser');

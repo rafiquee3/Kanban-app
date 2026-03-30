@@ -6,7 +6,7 @@ export const useLogin = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: async (credentials: any) => {
+    mutationFn: async (credentials: Record<string, unknown>) => {
       const { data } = await api.post('/auth/login', credentials);
       return data;
     },
@@ -23,7 +23,7 @@ export const useRegister = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: async (userData: any) => {
+    mutationFn: async (userData: Record<string, unknown>) => {
       const { data } = await api.post('/auth/register', userData);
       return data;
     },
