@@ -2,6 +2,8 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
+import { TaskStatus } from '@prisma/client';
 
 @Injectable()
 export class TasksService {
@@ -50,7 +52,7 @@ export class TasksService {
     });
   }
 
-  async update(id: string, updateTaskDto: any, userId: string) {
+  async update(id: string, updateTaskDto: UpdateTaskDto, userId: string) {
     const task = await this.prisma.task.findUnique({ where: { id } });
     if (!task || task.userId !== userId) {
       throw new ForbiddenException('Task not found or permission denied');
@@ -62,7 +64,7 @@ export class TasksService {
     });
   }
 
-  async updateStatus(id: string, status: any, userId: string) {
+  async updateStatus(id: string, status: TaskStatus, userId: string) {
     const task = await this.prisma.task.findUnique({ where: { id } });
     if (!task || task.userId !== userId) {
       throw new ForbiddenException('Task not found or permission denied');

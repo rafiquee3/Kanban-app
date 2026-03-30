@@ -14,7 +14,7 @@ import * as bcrypt from 'bcryptjs';
 describe('TasksService Integration', () => {
   let service: TasksService;
   let prisma: PrismaService;
-  let testUser: any;
+  let testUser: { id: string; email: string; username: string | null };
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -84,7 +84,7 @@ describe('TasksService Integration', () => {
 
     // Assert
     expect(tasks.length).toBeGreaterThan(0);
-    expect(tasks.some(t => t.title === taskTitle)).toBe(true);
+    expect(tasks.some((t) => t.title === taskTitle)).toBe(true);
   });
 
   it('should find tasks with filters', async () => {
@@ -100,9 +100,9 @@ describe('TasksService Integration', () => {
     const todoTasks = await service.findAll({ status: TaskStatus.TODO });
     const doneTasks = await service.findAll({ status: TaskStatus.DONE });
 
-    expect(todoTasks.every(t => t.status === TaskStatus.TODO)).toBe(true);
-    expect(doneTasks.every(t => t.status === TaskStatus.DONE)).toBe(true);
-    expect(doneTasks.some(t => t.title === 'Another Task')).toBe(true);
+    expect(todoTasks.every((t) => t.status === TaskStatus.TODO)).toBe(true);
+    expect(doneTasks.every((t) => t.status === TaskStatus.DONE)).toBe(true);
+    expect(doneTasks.some((t) => t.title === 'Another Task')).toBe(true);
   });
 
   it('should update task status', async () => {
@@ -115,7 +115,11 @@ describe('TasksService Integration', () => {
       },
     });
 
-    const updatedTask = await service.updateStatus(task.id, TaskStatus.IN_PROGRESS, testUser.id);
+    const updatedTask = await service.updateStatus(
+      task.id,
+      TaskStatus.IN_PROGRESS,
+      testUser.id,
+    );
     expect(updatedTask.status).toBe(TaskStatus.IN_PROGRESS);
 
     // Verify in DB

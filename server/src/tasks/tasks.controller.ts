@@ -11,6 +11,7 @@ import {
   Query,
   ParseUUIDPipe,
 } from '@nestjs/common';
+import type { RequestWithUser } from '../auth/interfaces/request-with-user.interface';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -39,7 +40,7 @@ export class TasksController {
   @Post()
   @ApiOperation({ summary: 'Create a new task' })
   @ApiCreatedResponse({ description: 'Task created successfully' })
-  create(@Body() createTaskDto: CreateTaskDto, @Req() req) {
+  create(@Body() createTaskDto: CreateTaskDto, @Req() req: RequestWithUser) {
     // req.user comes from JwtStrategy, which we implemented earlier
     return this.tasksService.create(createTaskDto, req.user.userId);
   }
@@ -47,7 +48,7 @@ export class TasksController {
   @Get()
   @ApiOperation({ summary: 'Get all user tasks with optional filters' })
   @ApiOkResponse({ description: 'List of tasks retrieved successfully' })
-  findAll(@Req() req, @Query() filterDto: GetTasksFilterDto) {
+  findAll(@Req() req: RequestWithUser, @Query() filterDto: GetTasksFilterDto) {
     return this.tasksService.findAll(filterDto);
   }
 
@@ -64,7 +65,7 @@ export class TasksController {
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateTaskDto: UpdateTaskDto,
-    @Req() req,
+    @Req() req: RequestWithUser,
   ) {
     return this.tasksService.update(id, updateTaskDto, req.user.userId);
   }
@@ -75,7 +76,7 @@ export class TasksController {
   updateStatus(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateTaskStatusDto: UpdateTaskStatusDto,
-    @Req() req,
+    @Req() req: RequestWithUser,
   ) {
     return this.tasksService.updateStatus(
       id,
@@ -87,7 +88,7 @@ export class TasksController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a task' })
   @ApiOkResponse({ description: 'Task deleted successfully' })
-  remove(@Param('id', ParseUUIDPipe) id: string, @Req() req) {
+  remove(@Param('id', ParseUUIDPipe) id: string, @Req() req: RequestWithUser) {
     return this.tasksService.remove(id, req.user.userId);
   }
 }

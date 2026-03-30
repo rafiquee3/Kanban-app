@@ -44,7 +44,7 @@ function KanbanBoard() {
     parseAsString.withDefault('').withOptions({ shallow: false, throttleMs: 500 })
   );
   const [isCreating, setIsCreating] = useQueryState('new', parseAsBoolean);
-  const { data: tasks, isLoading } = useTasks({ 
+  const { data: tasks } = useTasks({ 
     priority: priority || undefined,
     search: search || undefined
   });

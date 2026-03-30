@@ -13,7 +13,7 @@ describe('useAuth Hooks', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useRouter as any).mockReturnValue({ push: mockPush });
+    (useRouter as any).mockReturnValue({ push: mockPush }); // eslint-disable-line @typescript-eslint/no-explicit-any
     
     // Clear localStorage
     localStorage.clear();

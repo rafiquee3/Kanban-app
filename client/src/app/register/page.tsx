@@ -18,7 +18,7 @@ export default function RegisterPage() {
     register(
       { email, password, username },
       {
-        onError: (err: any) => {
+        onError: (err: any) => { // eslint-disable-line @typescript-eslint/no-explicit-any
           setError(err.response?.data?.message || 'Something went wrong during registration.');
         },
       }

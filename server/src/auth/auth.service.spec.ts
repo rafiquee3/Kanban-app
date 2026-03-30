@@ -10,8 +10,6 @@ jest.mock('bcrypt');
 
 describe('AuthService', () => {
   let service: AuthService;
-  let usersService: UsersService;
-  let jwtService: JwtService;
 
   const mockUsersService = {
     create: jest.fn(),
@@ -38,9 +36,7 @@ describe('AuthService', () => {
     }).compile();
 
     service = module.get<AuthService>(AuthService);
-    usersService = module.get<UsersService>(UsersService);
-    jwtService = module.get<JwtService>(JwtService);
-    
+
     jest.clearAllMocks();
   });
 
@@ -50,7 +46,11 @@ describe('AuthService', () => {
 
   describe('login', () => {
     it('should return an access token for valid credentials', async () => {
-      const user = { id: 'uuid', email: 'test@test.com', password: 'hashedPassword' };
+      const user = {
+        id: 'uuid',
+        email: 'test@test.com',
+        password: 'hashedPassword',
+      };
       mockUsersService.findByEmail.mockResolvedValue(user);
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
       mockJwtService.signAsync.mockResolvedValue('fake_token');
@@ -58,15 +58,21 @@ describe('AuthService', () => {
       const result = await service.login('test@test.com', 'password123');
 
       expect(result).toEqual({ access_token: 'fake_token' });
-      expect(mockUsersService.findByEmail).toHaveBeenCalledWith('test@test.com');
-      expect(bcrypt.compare).toHaveBeenCalledWith('password123', 'hashedPassword');
+      expect(mockUsersService.findByEmail).toHaveBeenCalledWith(
+        'test@test.com',
+      );
+      expect(bcrypt.compare).toHaveBeenCalledWith(
+        'password123',
+        'hashedPassword',
+      );
     });
 
     it('should throw UnauthorizedException if user not found', async () => {
       mockUsersService.findByEmail.mockResolvedValue(null);
 
-      await expect(service.login('wrong@test.com', 'pass'))
-        .rejects.toThrow(UnauthorizedException);
+      await expect(service.login('wrong@test.com', 'pass')).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
 
     it('should throw UnauthorizedException if password does not match', async () => {
@@ -74,8 +80,9 @@ describe('AuthService', () => {
       mockUsersService.findByEmail.mockResolvedValue(user);
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
 
-      await expect(service.login('test@test.com', 'wrongpass'))
-        .rejects.toThrow(new UnauthorizedException('Invalid credentials'));
+      await expect(service.login('test@test.com', 'wrongpass')).rejects.toThrow(
+        new UnauthorizedException('Invalid credentials'),
+      );
     });
   });
 
@@ -84,18 +91,27 @@ describe('AuthService', () => {
       const newUser = { id: 'new-id', email: 'new@test.com' };
       mockUsersService.create.mockResolvedValue(newUser);
 
-      const result = await service.register('new@test.com', 'pass123', 'newuser');
+      const result = await service.register(
+        'new@test.com',
+        'pass123',
+        'newuser',
+      );
 
       expect(result).toEqual({
         message: 'User created successfully',
         userId: 'new-id',
       });
-      expect(mockUsersService.create).toHaveBeenCalledWith('new@test.com', 'pass123', 'newuser');
+      expect(mockUsersService.create).toHaveBeenCalledWith(
+        'new@test.com',
+        'pass123',
+        'newuser',
+      );
     });
 
     it('should throw Error if password is too short (example validation)', async () => {
-      await expect(service.register('test@test.com', '123'))
-        .rejects.toThrow('Password too short');
+      await expect(service.register('test@test.com', '123')).rejects.toThrow(
+        'Password too short',
+      );
     });
   });
 });

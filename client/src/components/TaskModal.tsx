@@ -40,6 +40,7 @@ export default function TaskModal({ isOpen, onClose, task }: TaskModalProps) {
 
   useEffect(() => {
     if (task) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTitle(task.title);
       setDescription(task.description || '');
       setStatus(task.status);
